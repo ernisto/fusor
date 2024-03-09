@@ -1,0 +1,9 @@
+syntax type_expr(name: token.identifier)
+syntax type_field.unnamed(type: type_expr)
+syntax type_field.named(
+    name: token.identifier
+    (isVariadic: '...')?
+    (isOptional: '?')?
+    ':'
+    type: type_expr
+)

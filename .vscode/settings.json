@@ -1,0 +1,7 @@
+{
+    "luau-lsp.require.mode": "relativeToFile",
+    "luau-lsp.require.directoryAliases": {
+        "@lune/": "~/.lune/.typedefs/x.y.z/"
+    },
+    "discord.enabled": false,
+}
