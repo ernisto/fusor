@@ -7,7 +7,7 @@ local color = require('../utils/color')
 
 local lexer = require('token/lexer')
 local stream = require('token/stream')
-local parser = require('ast/parser')
+local setupParser = require('ast/parser')
 local transpile = require('ast/transpiler/transpile')
 
 --// functions
@@ -29,7 +29,7 @@ local b = os.clock()
 print(`scanned {color.yellow(#tokens)} tokens in {timing(b - a)}`)
 
 local tokenStream = stream(tokens)
-local parser = parser(tokenStream)
+local parser = setupParser(tokenStream)
 
 local c = os.clock()
 local ast = parser.scope()
