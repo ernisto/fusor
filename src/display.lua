@@ -7,6 +7,7 @@ local stackColors = {
 
 local function isArray(tab) return type(tab) == 'table' and type(next(tab)) == 'number' end
 local function isToken(tab) return type(tab) == 'table' and rawget(tab, 'kind') end
+local function isSyntaxNode(tab) return type(tab) == 'table' and rawget(tab, 'nextClauses') end
 
 
 local function display(value, stack)
@@ -61,6 +62,40 @@ local function display(value, stack)
                 ..'\n'
         end
         if next(nodes)
+            then out ..= start:sub(1+3)
+            else out = out:sub(1, -10)
+        end
+        out ..= stackColor(')')
+
+    elseif isSyntaxNode(value) then
+        
+        local clauses = value.nextClauses
+        out = stackColor('(')
+
+        --// data
+        for index, value in value do
+
+            if index == 'kind' then continue end
+            if index == 'nextClauses' then continue end
+
+            out ..= color.white(index)
+                ..color.dark_red('=')
+                ..color.blue(display(value, stack))
+                ..color.dark_red(', ')
+        end
+
+        --// clauses
+        if next(clauses) then out ..= '\n' end
+        for clause, node in clauses do
+            
+            out ..= start
+                ..color.dark_red(`{if clause.checkKind then 'kind' else 'raw'} `)
+                ..display(clause.checkRaw or clause.checkKind)
+                ..' '
+                ..display(node, stack)
+                ..'\n'
+        end
+        if next(clauses)
             then out ..= start:sub(1+3)
             else out = out:sub(1, -10)
         end
