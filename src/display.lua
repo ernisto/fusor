@@ -15,12 +15,18 @@ local function display(value, stack)
     stack = stack or {}
     table.insert(stack, value)
 
+    if stack[value] then
+
+        return color.bold(`depth({stack[value]}) {value}`)
+    end
+
     local start = string.rep('   ', #stack)
     local stackColor = stackColors[1+ #stack % #stackColors]
     local out = color.blue(tostring(value))
 
     if isArray(value) then
 
+        stack[value] = #stack
         out = stackColor('[')
 
         for index, value in value do
@@ -33,6 +39,8 @@ local function display(value, stack)
             ..stackColor(']')
 
     elseif isToken(value) then
+
+        stack[value] = #stack
 
         local nodes = {}
         out = color.pink(value.kind)
@@ -69,6 +77,8 @@ local function display(value, stack)
 
     elseif isSyntaxNode(value) then
         
+        stack[value] = #stack
+
         local clauses = value.nextClauses
         out = stackColor('(')
 
@@ -100,6 +110,12 @@ local function display(value, stack)
             else out = out:sub(1, -10)
         end
         out ..= stackColor(')')
+
+        -- stack[value] = nil
+
+    elseif type(value) == 'table' then
+
+        out = stackColor('[]')
 
     elseif type(value) == 'string' then
 
