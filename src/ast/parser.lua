@@ -291,6 +291,8 @@ return function(stream)
     --// End
     return {
         errors = errors,
+        type_tuple = type_tuple,
+        path = read_path,
         scope = scope,
     }
 end
